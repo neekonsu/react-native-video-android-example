@@ -1,26 +1,47 @@
-/*Example of React Native Video*/
-import React, { Component } from 'react';
 //Import React
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
 //Import Basic React Native Component
-import Video from 'react-native-video';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 //Import React Native Video to play video
-import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
+import Video from 'react-native-video';
 //Media Controls to control Play/Pause/Seek and full screen
- 
-class App extends Component {
+import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
+// For navigation between pages
+import { NativeRouter, Route, Link } from "react-router-native";
+// Splash: root screen which greets users
+class Splash extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <Link style={{flex: 1, flexDirection: "row"}} to="/VideoPlayer">
+        <View style={{flex: 1, flexDirection: "row"}}>
+          <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
+            <Text style={{textAlign: "center", textAlignVertical: "center"}}>Tap To Get Started</Text>
+          </View>
+          <View style={{flex: 1, backgroundColor: 'grey'}}/>
+          <View style={{flex: 100, flexDirection: "column", justifyContent: "center", backgroundColor: 'powderblue'}}>
+            <Text style={{textAlign: "center", textAlignVertical: "center"}}>Tap To Get Started</Text>
+          </View>
+        </View>
+      </Link>
+    );
+  }
+}
+// VideoPlayer: plays testing video
+class VideoPlayer extends Component {
   videoPlayer;
- 
   constructor(props) {
     super(props);
     this.state = {
       currentTime: 0,
       duration: 0,
-      isFullScreen: false,
+      isFullScreen: true,
       isLoading: true,
       paused: false,
       playerState: PLAYER_STATES.PLAYING,
-      screenType: 'content',
+      screenType: 'cover',
     };
   }
  
@@ -32,7 +53,7 @@ class App extends Component {
   onPaused = playerState => {
     //Handler for Video Pause
     this.setState({
-      paused: !this.state.paused,
+      paused: false,
       playerState,
     });
   };
@@ -66,17 +87,9 @@ class App extends Component {
   enterFullScreen = () => {};
   
   onFullScreen = () => {
-    if (this.state.screenType == 'content')
-      this.setState({ screenType: 'cover' });
-    else this.setState({ screenType: 'content' });
+    this.setState({ screenType: 'cover' });
   };
-  renderToolbar = () => (
-    <View>
-      <Text> toolbar </Text>
-    </View>
-  );
   onSeeking = currentTime => this.setState({ currentTime });
- 
   render() {
     return (
       <View style={styles.container}>
@@ -93,23 +106,20 @@ class App extends Component {
           style={styles.mediaPlayer}
           volume={10}
         />
-        <MediaControls
-          duration={this.state.duration}
-          isLoading={this.state.isLoading}
-          mainColor="#333"
-          onFullScreen={this.onFullScreen}
-          onPaused={this.onPaused}
-          onReplay={this.onReplay}
-          onSeek={this.onSeek}
-          onSeeking={this.onSeeking}
-          playerState={this.state.playerState}
-          progress={this.state.currentTime}
-          toolbar={this.renderToolbar()}
-        />
       </View>
     );
   }
 }
+
+function App() {
+  return (
+    <NativeRouter>
+      <Route exact path="/" component={Splash} />
+      <Route path="/VideoPlayer" component={VideoPlayer} />
+    </NativeRouter>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
