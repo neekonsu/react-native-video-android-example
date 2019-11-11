@@ -8,6 +8,15 @@ import Video from 'react-native-video';
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 // For navigation between pages
 import { NativeRouter, Route, Link } from "react-router-native";
+// For updating EventIDE with trial-state information
+const lsl = require('node-lsl');
+const numChannels = 1;
+const info = lsl.create_streaminfo("Goggle", "EEG", numChannels, 100, lsl.channel_format_t.cft_float32, "Bismarck Goggle");
+const desc = lsl.get_desc(info);
+const channels = lsl.append_child(desc, "channels");
+const channel = lsl.append_child(channels, "channel");
+lsl.append_child_value(channel, "label", "Channel " + 1);
+const outlet = lsl.create_outlet(info, 0, 360);
 // Splash: root screen which greets users
 class Splash extends React.Component {
   constructor(props) {
@@ -70,6 +79,7 @@ class VideoPlayer extends Component {
     if (!isLoading && playerState !== PLAYER_STATES.ENDED) {
       this.setState({ currentTime: data.currentTime });
     }
+    lsl.push_sample_ft(outlet, this.state.currentTime, lsl.local_clock());
   };
   
   onLoad = data => this.setState({ duration: data.duration, isLoading: false });
