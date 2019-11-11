@@ -15,7 +15,8 @@
     "react-native": "0.61.4",
     "react-native-media-controls": "^1.1.1",
     "react-native-router": "^0.2.1",
-    "react-native-video": "^5.0.2"
+    "react-native-video": "^5.0.2",
+    "react-router-native": "^5.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
