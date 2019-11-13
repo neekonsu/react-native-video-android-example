@@ -9,7 +9,8 @@ import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 // For navigation between pages
 import { NativeRouter, Route, Link } from "react-router-native";
 // For updating EventIDE with trial-state information
-const lsl = require('node-lsl');
+const lsl = require('./node-lsl/index');
+// Define LSL outlet
 const numChannels = 1;
 const info = lsl.create_streaminfo("Goggle", "EEG", numChannels, 100, lsl.channel_format_t.cft_float32, "Bismarck Goggle");
 const desc = lsl.get_desc(info);
